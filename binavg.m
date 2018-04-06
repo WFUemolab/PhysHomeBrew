@@ -1,4 +1,10 @@
 function x = binavg(dat, binsize)
+% function x = binavg(dat, 60)
+%
+% function to average data in a vector into smaller bins - binsize is in
+% the unit of the original data. So if you have 100s of data and want 20s
+% bins, binsize = 20. If you have 100s of data and want 20 bins then
+% binsize = 5.
 
 if size(dat,1) > size(dat,2)
     dat = dat';
