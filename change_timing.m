@@ -49,6 +49,8 @@ end
 for i = 1:numsubs
     T = anslabreadtiming([expdir '/raw/' SubName{i} '.m']);
     switch varargin{1}
+        case 'aer'
+            T = aer(T);
         case 'addtrials'
         %T = AddTrials(T);
         T = lasttwotrials(T);       
@@ -118,7 +120,7 @@ T(12,:) = [12, 60, 120, 60];
 T(13,:) = [13, 120, 180, 60];
 % T(67,:) = [4, T(66,2)+16.1, T(66,3), 16.1];
 % T(68,:) = [5, T(66,3), T(66,3)+16.1, 16.1];
-
+end
 
 function T = change_conds(T, inc, numsegs)
     segs = inc:inc:numsegs*inc;
@@ -134,7 +136,47 @@ function T = change_conds(T, inc, numsegs)
             T(~ismember(condrange{k}, condrange{k-1}),1) = k;
         end
     end
+end
 
+function Tnew = aer(T)
+    c = 1;
+    Tnew(1,1) = c;
+    Tnew(1,2) = T(1,2);
+    Tnew(1,3) = T(1,2) + 60;
+    Tnew(1,4) = 60;
+    for k = 1:2
+        c = c + 1;
+        Tnew(c,1) = c;
+        Tnew(c,2) = Tnew(c-1,2) + 60;
+        Tnew(c,3) = Tnew(c,2) + 60;
+        Tnew(c,4) = 60;
+    end
+    c = c+1;
+    Tnew(c,1) = c;
+    Tnew(c,2) = T(2,2);
+    Tnew(c,3) = T(2,2) + 60;
+    Tnew(c,4) = 60;
+    for k = 1:9
+        c = c + 1;
+        Tnew(c,1) = c;
+        Tnew(c,2) = Tnew(c-1,2) + 60;
+        Tnew(c,3) = Tnew(c,2) + 60;
+        Tnew(c,4) = 60;
+    end
+    c = c+1;
+    Tnew(c,1) = c;
+    Tnew(c,2) = T(3,2);
+    Tnew(c,3) = T(3,2) + 60;
+    Tnew(c,4) = 60;
+     for k = 1:2
+        c = c + 1;
+        Tnew(c,1) = c;
+        Tnew(c,2) = Tnew(c-1,2) + 60;
+        Tnew(c,3) = Tnew(c,2) + 60;
+        Tnew(c,4) = 60;
+     end
+end
+    
 
 function Tnew = rebin(T, binsize)
         for i = 1:size(T,1)
@@ -154,7 +196,7 @@ function Tnew = rebin(T, binsize)
                 end
             end
         end
-    
+ end 
         
         function Tnew = fpfrebin(T)
             
@@ -189,6 +231,7 @@ function Tnew = rebin(T, binsize)
                     
                 end
             end
+      end
       
 function Tnew = addur(T)
                 
@@ -197,10 +240,10 @@ for i = 1:(size(T,1) - 1)
     Tnew(i,3) = T(i+1,2);
     Tnew(i,4) = T(i+1,2) - T(i,2);
 end
-            
+end            
      
    
-    
+end    
    
     
             
